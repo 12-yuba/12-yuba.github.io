@@ -3,25 +3,469 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Mr. Su 的个人网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Su · 硬件逆向与工具开发</title>
+    <meta name="description" content="Mr. Su 的个人主页：USB PD 测试仪固件、热成像安卓应用、水冷屏上位机等开源项目。">
+    <style>
+        :root {
+            --bg: #f6f7f9;
+            --card: #ffffff;
+            --line: #e4e7eb;
+            --text: #1f2328;
+            --muted: #656d76;
+            --accent: #0969da;
+            --accent-soft: #ddf4ff;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 20px 64px;
+        }
+
+        /* header */
+        .hero {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 92px;
+            height: 92px;
+            border-radius: 50%;
+            border: 1px solid var(--line);
+            background: #fff;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: -0.3px;
+        }
+
+        .tagline {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .links {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: #fff;
+            color: var(--text);
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.15s;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .btn.primary:hover {
+            background: #0860ca;
+            color: #fff;
+        }
+
+        /* stats */
+        .stats {
+            display: flex;
+            gap: 28px;
+            margin: 26px 0 0;
+            padding: 14px 0 0;
+            border-top: 1px solid var(--line);
+            flex-wrap: wrap;
+        }
+
+        .stat b {
+            font-size: 20px;
+            font-weight: 650;
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-size: 13px;
+            margin-left: 5px;
+        }
+
+        /* tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin: 40px 0 18px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border: 0;
+            background: none;
+            color: var(--muted);
+            font-size: 15px;
+            font-family: inherit;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+
+        .tab.on {
+            color: var(--text);
+            font-weight: 600;
+            border-bottom-color: #fd8c73;
+        }
+
+        /* cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .card h3 a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .card h3 a:hover {
+            text-decoration: underline;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--muted);
+            flex: 1;
+        }
+
+        .meta {
+            display: flex;
+            gap: 14px;
+            font-size: 12.5px;
+            color: var(--muted);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: -1px;
+        }
+
+        .card .go {
+            font-size: 13.5px;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* posts */
+        .post {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            margin-bottom: 12px;
+        }
+
+        .post h3 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .post h3 a {
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .post h3 a:hover {
+            color: var(--accent);
+        }
+
+        .post p {
+            margin: 0 0 8px;
+            font-size: 14px;
+            color: var(--muted);
+            white-space: pre-wrap;
+        }
+
+        .empty {
+            color: var(--muted);
+            font-size: 14px;
+            background: #fff;
+            border: 1px dashed var(--line);
+            border-radius: var(--radius);
+            padding: 28px 18px;
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 44px;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .hint {
+            font-size: 13px;
+            color: var(--muted);
+            margin: 0 0 14px;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="wrap">
 
-    <h1>👋 Hello，大家好！</h1>
+        <header class="hero">
+            <img class="avatar" src="https://avatars.githubusercontent.com/u/84950652?v=4" alt="avatar">
+            <div>
+                <h1>Mr. Su</h1>
+                <p class="tagline">硬件逆向 · 嵌入式固件 · 上位机工具。折腾 PD 测试仪、热成像、水冷屏，把闭源设备改成能自己控制的样子。</p>
+                <div class="links">
+                    <a class="btn primary" href="https://github.com/12-yuba">GitHub</a>
+                    <a class="btn" href="mailto:3482473735@qq.com">邮箱</a>
+                    <a class="btn" href="#posts">写点什么</a>
+                </div>
+            </div>
+        </header>
 
-    <p>我是 <strong>Mr. Su</strong>。</p>
+        <div class="stats">
+            <div class="stat"><b id="s-repo">–</b><span>开源仓库</span></div>
+            <div class="stat"><b id="s-star">–</b><span>Star</span></div>
+            <div class="stat"><b id="s-view">–</b><span>访问量</span></div>
+        </div>
 
-    <p>
-        欢迎访问我的个人网站，这里主要用于记录学习、分享项目和展示个人作品。
-    </p>
+        <div class="tabs">
+            <button class="tab on" data-tab="projects">项目</button>
+            <button class="tab" data-tab="posts">动态</button>
+        </div>
 
-    <p>
-        如果你希望与我交流，可以发送邮件至：
-        <a href="mailto:3482473735@qq.com">
-            3482473735@qq.com
-        </a>
-    </p>
+        <section id="pane-projects">
+            <div class="grid" id="repo-list">
+                <div class="empty">正在加载项目…</div>
+            </div>
+        </section>
+
+        <section id="pane-posts" hidden>
+            <p class="hint">这个区块直接读本仓库的 Issue —— 在 GitHub 上开一个 Issue，刷新页面就出现在这里，不用改代码、不用提交文件。</p>
+            <div id="post-list">
+                <div class="empty">正在加载动态…</div>
+            </div>
+            <p class="hint" style="margin-top:14px">
+                <a href="https://github.com/12-yuba/12-yuba.github.io/issues/new">→ 发一条动态 / 留言</a>
+            </p>
+        </section>
+
+        <footer>
+            <span>© <span id="year">2026</span> Mr. Su · 托管于 GitHub Pages</span>
+            <span><a href="https://github.com/12-yuba/12-yuba.github.io">本页源码</a></span>
+        </footer>
+
+    </div>
+
+    <script>
+        var USER = '12-yuba';
+        var SITE_REPO = '12-yuba/12-yuba.github.io';
+        var HIDE = ['12-yuba.github.io', 'laughing-winner'];
+
+        // API 不可用时（限流/断网）的兜底数据
+        var FALLBACK = [
+            {
+                name: 'lx800ctl',
+                description: 'TCOMAS LX800 水冷屏（480×480）第三方轻量上位机：图片/GIF 推送、CPU/GPU 监控贴图、零内核驱动。',
+                language: 'C#', stargazers_count: 0, pushed_at: '2026-10-08',
+                html_url: 'https://github.com/12-yuba/lx800ctl'
+            },
+            {
+                name: 'tiny1-b-app-android',
+                description: 'Tiny1-B 热成像安卓应用修改版：铁红伪彩调色板、方向旋转开关、2× 超分（A/B 两个变体）。',
+                language: 'Java', stargazers_count: 1, pushed_at: '2026-10-08',
+                html_url: 'https://github.com/12-yuba/tiny1-b-app-android'
+            },
+            {
+                name: 'tiny1b-thermal-ai',
+                description: 'Tiny1-B 热成像 AI 修改版 APK 发布仓库，含 Xtherm 超分移植版本。',
+                language: 'Java', stargazers_count: 0, pushed_at: '2026-10-08',
+                html_url: 'https://github.com/12-yuba/tiny1b-thermal-ai'
+            }
+        ];
+
+        var LANG_COLOR = {
+            C: '#555555', 'C++': '#f34b7d', 'C#': '#178600', Java: '#b07219',
+            Python: '#3572A5', JavaScript: '#f1e05a', HTML: '#e34c26',
+            Assembly: '#6E4C13', Rust: '#dea584', Go: '#00ADD8'
+        };
+
+        function esc(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        function repoCard(r) {
+            var lang = r.language ? '<span><i class="dot" style="background:' +
+                (LANG_COLOR[r.language] || '#8b949e') + '"></i>' + esc(r.language) + '</span>' : '';
+            var star = '<span>★ ' + r.stargazers_count + '</span>';
+            var date = r.pushed_at ? '<span>' + esc(r.pushed_at.slice(0, 10)) + '</span>' : '';
+            return '<div class="card">' +
+                '<h3><a href="' + esc(r.html_url) + '" target="_blank" rel="noopener">' + esc(r.name) + '</a></h3>' +
+                '<p>' + esc(r.description || '暂无描述') + '</p>' +
+                '<div class="meta">' + lang + star + date + '</div>' +
+                '<a class="go" href="' + esc(r.html_url) + '/releases/latest" target="_blank" rel="noopener">下载 / 查看 →</a>' +
+                '</div>';
+        }
+
+        function renderRepos(list) {
+            var box = document.getElementById('repo-list');
+            if (!list.length) {
+                box.innerHTML = '<div class="empty">还没有公开项目。</div>';
+                return;
+            }
+            box.innerHTML = list.map(repoCard).join('');
+            var stars = list.reduce(function (a, r) { return a + (r.stargazers_count || 0); }, 0);
+            document.getElementById('s-repo').textContent = list.length;
+            document.getElementById('s-star').textContent = stars;
+        }
+
+        function loadRepos() {
+            fetch('https://api.github.com/users/' + USER + '/repos?per_page=100&sort=pushed')
+                .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                .then(function (data) {
+                    var list = data.filter(function (r) {
+                        return HIDE.indexOf(r.name) === -1 && !r.archived;
+                    });
+                    renderRepos(list);
+                })
+                .catch(function () {
+                    renderRepos(FALLBACK);   // 限流或断网时用兜底数据
+                });
+        }
+
+        var postsLoaded = false;
+
+        function loadPosts() {
+            if (postsLoaded) return;
+            postsLoaded = true;
+            var box = document.getElementById('post-list');
+            fetch('https://api.github.com/repos/' + SITE_REPO + '/issues?state=all&sort=created&direction=desc&per_page=20')
+                .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+                .then(function (data) {
+                    var list = data.filter(function (i) { return !i.pull_request; });
+                    if (!list.length) {
+                        box.innerHTML = '<div class="empty">还没有动态。开一个 Issue，这里就会显示。</div>';
+                        return;
+                    }
+                    box.innerHTML = list.map(function (i) {
+                        var body = (i.body || '').replace(/[#*`>\[\]]/g, '').trim();
+                        if (body.length > 240) body = body.slice(0, 240) + '…';
+                        return '<div class="post">' +
+                            '<h3><a href="' + esc(i.html_url) + '" target="_blank" rel="noopener">' + esc(i.title) + '</a></h3>' +
+                            (body ? '<p>' + esc(body) + '</p>' : '') +
+                            '<div class="meta"><span>' + esc((i.created_at || '').slice(0, 10)) + '</span>' +
+                            '<span>' + (i.state === 'open' ? '开放' : '已关闭') + '</span></div>' +
+                            '</div>';
+                    }).join('');
+                })
+                .catch(function () {
+                    box.innerHTML = '<div class="empty">动态加载失败（GitHub API 限流）。稍后刷新试试。</div>';
+                });
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (btn) {
+            btn.addEventListener('click', function () {
+                Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) {
+                    b.classList.remove('on');
+                });
+                btn.classList.add('on');
+                var isProj = btn.dataset.tab === 'projects';
+                document.getElementById('pane-projects').hidden = !isProj;
+                document.getElementById('pane-posts').hidden = isProj;
+                if (!isProj) loadPosts();
+                if (location.hash) history.replaceState(null, '', location.pathname);
+            });
+        });
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        loadRepos();
+    </script>
+
+    <!-- 访问量统计（不蒜子） -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <script>
+        // 不蒜子写入 #busuanzi_value_site_pv 后同步到顶部统计条
+        var t = setInterval(function () {
+            var el = document.getElementById('busuanzi_value_site_pv');
+            if (el && el.textContent && el.textContent !== '') {
+                document.getElementById('s-view').textContent = el.textContent;
+                clearInterval(t);
+            }
+        }, 600);
+        setTimeout(function () { clearInterval(t); }, 8000);
+    </script>
+    <span id="busuanzi_container_site_pv" style="display:none">
+        访问量 <span id="busuanzi_value_site_pv"></span>
+    </span>
 
 </body>
 
