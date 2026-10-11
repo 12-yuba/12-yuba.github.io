@@ -285,7 +285,7 @@
                 <div class="links">
                     <a class="btn primary" href="https://github.com/12-yuba">GitHub</a>
                     <a class="btn" href="mailto:3482473735@qq.com">邮箱</a>
-                    <a class="btn" href="#posts">写点什么</a>
+                    <a class="btn" id="btn-write" href="#comments">留言</a>
                 </div>
             </div>
         </header>
@@ -299,6 +299,7 @@
         <div class="tabs">
             <button class="tab on" data-tab="projects">项目</button>
             <button class="tab" data-tab="posts">动态</button>
+            <button class="tab" data-tab="comments">留言</button>
         </div>
 
         <section id="pane-projects">
@@ -315,6 +316,11 @@
             <p class="hint" style="margin-top:14px">
                 <a href="https://github.com/12-yuba/12-yuba.github.io/issues/new">→ 发一条动态 / 留言</a>
             </p>
+        </section>
+
+        <section id="pane-comments" hidden>
+            <p class="hint">留言需要有 GitHub 账号（用 GitHub 登录即可发言），内容存在本仓库的 Discussions 里，带审核、可删可改。</p>
+            <div id="giscus-box"></div>
         </section>
 
         <footer>
@@ -432,18 +438,54 @@
                 });
         }
 
+        var giscusLoaded = false;
+
+        function loadComments() {
+            if (giscusLoaded) return;
+            giscusLoaded = true;
+            var s = document.createElement('script');
+            s.src = 'https://giscus.app/client.js';
+            var attrs = {
+                'data-repo': SITE_REPO,
+                'data-repo-id': 'R_kgDOGHxPPw',
+                'data-category': 'General',
+                'data-category-id': 'DIC_kwDOGHxPP84DHjKC',
+                'data-mapping': 'pathname',
+                'data-strict': '0',
+                'data-reactions-enabled': '1',
+                'data-emit-metadata': '0',
+                'data-input-position': 'bottom',
+                'data-theme': 'light',
+                'data-lang': 'zh-CN',
+                'data-loading': 'lazy'
+            };
+            Object.keys(attrs).forEach(function (k) { s.setAttribute(k, attrs[k]); });
+            s.crossOrigin = 'anonymous';
+            s.async = true;
+            document.getElementById('giscus-box').appendChild(s);
+        }
+
+        var PANES = { projects: 'pane-projects', posts: 'pane-posts', comments: 'pane-comments' };
+
         Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (btn) {
             btn.addEventListener('click', function () {
                 Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (b) {
                     b.classList.remove('on');
                 });
                 btn.classList.add('on');
-                var isProj = btn.dataset.tab === 'projects';
-                document.getElementById('pane-projects').hidden = !isProj;
-                document.getElementById('pane-posts').hidden = isProj;
-                if (!isProj) loadPosts();
-                if (location.hash) history.replaceState(null, '', location.pathname);
+                var key = btn.dataset.tab;
+                Object.keys(PANES).forEach(function (k) {
+                    document.getElementById(PANES[k]).hidden = (k !== key);
+                });
+                if (key === 'posts') loadPosts();
+                if (key === 'comments') loadComments();
             });
+        });
+
+        document.getElementById('btn-write').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector('.tab[data-tab="comments"]').click();
+            document.querySelector('.tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
         document.getElementById('year').textContent = new Date().getFullYear();
