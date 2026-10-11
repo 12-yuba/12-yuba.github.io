@@ -319,8 +319,17 @@
         </section>
 
         <section id="pane-comments" hidden>
-            <p class="hint">留言需要有 GitHub 账号（用 GitHub 登录即可发言），内容存在本仓库的 Discussions 里，带审核、可删可改。</p>
+            <p class="hint">留言需要有 GitHub 账号（用 GitHub 登录即可发言），内容存在本仓库的 Discussions 里，可删可改可置顶。</p>
             <div id="giscus-box"></div>
+            <div id="giscus-fallback" class="empty" hidden>
+                <p style="margin:0 0 10px">留言组件没能加载。<br>常见原因：还没给这个仓库安装 giscus 机器人，或者网络连不上 giscus.app。</p>
+                <a class="btn primary" href="https://github.com/12-yuba/12-yuba.github.io/discussions/new?category=general" target="_blank" rel="noopener">去 GitHub 留言</a>
+                <a class="btn" href="https://github.com/12-yuba/12-yuba.github.io/issues/new" target="_blank" rel="noopener">发一条 Issue</a>
+            </div>
+            <p class="hint" style="margin-top:14px">
+                备用入口：<a href="https://github.com/12-yuba/12-yuba.github.io/discussions" target="_blank" rel="noopener">全部留言</a>
+                · <a href="https://github.com/12-yuba/12-yuba.github.io/issues" target="_blank" rel="noopener">Issue 列表</a>
+            </p>
         </section>
 
         <footer>
@@ -462,7 +471,26 @@
             Object.keys(attrs).forEach(function (k) { s.setAttribute(k, attrs[k]); });
             s.crossOrigin = 'anonymous';
             s.async = true;
+            s.onerror = function () { showFallback(); };
             document.getElementById('giscus-box').appendChild(s);
+
+            // 6 秒没出 iframe 就认为失败，显示备用入口；之后再检测一次，晚到了就收回提示
+            setTimeout(function () {
+                if (!hasIframe()) showFallback();
+                setTimeout(function () {
+                    if (hasIframe()) document.getElementById('giscus-fallback').hidden = true;
+                }, 4000);
+            }, 6000);
+        }
+
+        function hasIframe() {
+            var box = document.getElementById('giscus-box');
+            return !!(box && box.querySelector('iframe'));
+        }
+
+        function showFallback() {
+            var el = document.getElementById('giscus-fallback');
+            if (el && !hasIframe()) el.hidden = false;
         }
 
         var PANES = { projects: 'pane-projects', posts: 'pane-posts', comments: 'pane-comments' };
@@ -479,6 +507,7 @@
                 });
                 if (key === 'posts') loadPosts();
                 if (key === 'comments') loadComments();
+                document.querySelector('.tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
